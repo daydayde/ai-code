@@ -32,3 +32,27 @@ mybatis-flex:
   configuration:
     # 日志实现，设置为StdOutImpl即可在控制台打印SQL
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+langchain4j:
+  community:
+    dashscope:
+      streaming-chat-model:
+        api-key: ${DASHSCOPE_API_KEY}
+        model-name: glm-4.7
+        max-tokens: 8192
+      chat-model:
+        api-key: ${DASHSCOPE_API_KEY}
+        model-name: glm-4.7
+        max-tokens: 8192
+        parameters:
+          strict-json-schema: true
+          response-format: json
+
+
+#// 在代码中构建模型时启用请求和响应日志
+#ChatModel chatModel = QwenChatModel.builder()
+#    .apiKey("${DASHSCOPE_API_KEY}")
+#    .modelName("glm-4.7")
+#    .logRequests(true)    // 启用请求日志记录
+#    .logResponses(true)   // 启用响应日志记录
+#    .build();
