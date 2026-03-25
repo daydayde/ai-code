@@ -1,10 +1,12 @@
 package com.bobby.aicode.service;
 
 import com.bobby.aicode.model.dto.app.AppQueryRequest;
+import com.bobby.aicode.model.entity.User;
 import com.bobby.aicode.model.vo.AppVO;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.bobby.aicode.model.entity.App;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -20,4 +22,12 @@ public interface AppService extends IService<App> {
     QueryWrapper getQueryWrapper(AppQueryRequest appQueryRequest);
 
     List<AppVO> getAppVOList(List<App> appList);
+
+    Flux<String> chatToGenCode(Long appId, String prompt, User loginUser);
+
+    /**
+     * 应用部署
+     * 返回可访问的部署地址
+     * */
+    String deployApp(Long appId,User loginUser);
 }

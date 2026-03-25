@@ -1,4 +1,4 @@
-package com.bobby.aicode.model.dto;
+package com.bobby.aicode.model.dto.user;
 
 import com.bobby.aicode.common.PageRequest;
 import lombok.Data;

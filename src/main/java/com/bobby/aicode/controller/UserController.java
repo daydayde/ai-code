@@ -9,7 +9,7 @@ import com.bobby.aicode.constant.UserConstant;
 import com.bobby.aicode.exception.BusinessException;
 import com.bobby.aicode.exception.ErrorCode;
 import com.bobby.aicode.exception.ThrowUtils;
-import com.bobby.aicode.model.dto.*;
+import com.bobby.aicode.model.dto.user.*;
 import com.bobby.aicode.model.vo.LoginUserVO;
 import com.bobby.aicode.model.vo.UserVO;
 import com.mybatisflex.core.paginate.Page;

@@ -1,6 +1,6 @@
 package com.bobby.aicode.service;
 
-import com.bobby.aicode.model.dto.UserQueryRequest;
+import com.bobby.aicode.model.dto.user.UserQueryRequest;
 import com.bobby.aicode.model.vo.LoginUserVO;
 import com.bobby.aicode.model.vo.UserVO;
 import com.mybatisflex.core.query.QueryWrapper;

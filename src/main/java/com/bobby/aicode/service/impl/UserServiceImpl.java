@@ -6,7 +6,7 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.bobby.aicode.exception.BusinessException;
 import com.bobby.aicode.exception.ErrorCode;
-import com.bobby.aicode.model.dto.UserQueryRequest;
+import com.bobby.aicode.model.dto.user.UserQueryRequest;
 import com.bobby.aicode.model.enums.UserRoleEnum;
 import com.bobby.aicode.model.vo.LoginUserVO;
 import com.bobby.aicode.model.vo.UserVO;
@@ -16,7 +16,6 @@ import com.bobby.aicode.model.entity.User;
 import com.bobby.aicode.mapper.UserMapper;
 import com.bobby.aicode.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
