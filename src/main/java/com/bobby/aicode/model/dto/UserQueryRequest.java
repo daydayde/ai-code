@@ -3,11 +3,13 @@ package com.bobby.aicode.model.dto;
 import com.bobby.aicode.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@NoArgsConstructor
 public class UserQueryRequest extends PageRequest implements Serializable {
 
     /**

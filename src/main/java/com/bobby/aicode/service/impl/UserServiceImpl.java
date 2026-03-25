@@ -16,6 +16,7 @@ import com.bobby.aicode.model.entity.User;
 import com.bobby.aicode.mapper.UserMapper;
 import com.bobby.aicode.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -141,13 +142,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         UserVO userVO = new UserVO();
         BeanUtil.copyProperties(user, userVO);
-        return null;
+        return userVO;
     }
 
     @Override
     public List<UserVO> getUserVOList(List<User> userList) {
         if (CollUtil.isEmpty(userList)) {
-            return new ArrayList<UserVO>();
+            return new ArrayList<>();
         }
         return userList.stream()
                 .map(this::getUserVO)
@@ -176,13 +177,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String userRole = userQueryRequest.getUserRole();
         String sortField = userQueryRequest.getSortField();
         String sortOrder = userQueryRequest.getSortOrder();
-        return QueryWrapper.create()
-                .eq("id", id)
-                .eq("userRole", userRole)
+
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .eq("id", id) // where id = ${id}
+                .eq("userRole", userRole) // and userRole = ${userRole}
                 .like("userAccount", userAccount)
                 .like("userName", userName)
                 .like("userProfile", userProfile)
                 .orderBy(sortField, "ascend".equals(sortOrder));
+        String sql = queryWrapper.toSQL();
+        System.out.println(sql);
+        return queryWrapper;
     }
 
 }
