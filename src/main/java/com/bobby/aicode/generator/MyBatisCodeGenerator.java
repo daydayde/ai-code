@@ -9,7 +9,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.util.Map;
 
 public class MyBatisCodeGenerator {
-    public static final String[] TABLE_NAMES = new String[]{"user"};
+    public static final String[] TABLE_NAMES = new String[]{"app"};
 
     public static void main(String[] args) {
         //配置数据源
