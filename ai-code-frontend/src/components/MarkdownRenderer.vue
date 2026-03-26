@@ -105,7 +105,7 @@ const renderedMarkdown = computed(() => {
   background-color: #f1f1f1;
   padding: 0.2em 0.4em;
   border-radius: 3px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: Consolas, 'Courier New', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.9em;
 }
 
@@ -116,6 +116,7 @@ const renderedMarkdown = computed(() => {
   padding: 1em;
   overflow-x: auto;
   margin: 1em 0;
+  font-family: Consolas, 'Courier New', Menlo, Monaco, 'Ubuntu Mono', monospace;
 }
 
 .markdown-content :deep(pre code) {
@@ -124,6 +125,7 @@ const renderedMarkdown = computed(() => {
   border-radius: 0;
   font-size: 0.9em;
   line-height: 1.4;
+  font-family: Consolas, 'Courier New', Menlo, Monaco, 'Ubuntu Mono', monospace;
 }
 
 .markdown-content :deep(table) {
@@ -174,7 +176,7 @@ const renderedMarkdown = computed(() => {
 .markdown-content :deep(.hljs) {
   background-color: #f8f8f8 !important;
   border-radius: 6px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: Consolas, 'Courier New', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.9em;
   line-height: 1.4;
 }

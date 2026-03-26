@@ -140,6 +140,14 @@ export async function listGoodAppVoByPage(
   })
 }
 
+/** 此处后端没有提供注释 GET /app/list */
+export async function list1(options?: { [key: string]: any }) {
+  return request<API.App[]>('/app/list', {
+    method: 'GET',
+    ...(options || {}),
+  })
+}
+
 /** 此处后端没有提供注释 POST /app/my/list/page/vo */
 export async function listMyAppVoByPage(
   body: API.AppQueryRequest,
