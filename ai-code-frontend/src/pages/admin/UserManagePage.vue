@@ -14,7 +14,6 @@
     </a-form>
     <a-divider />
     <!-- 表格 -->
-
     <a-table
       :columns="columns"
       :data-source="data"
@@ -37,7 +36,7 @@
           {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
         <template v-else-if="column.key === 'action'">
-          <a-button danger @click = "doDelete(record.id)">删除</a-button>
+          <a-button danger @click="doDelete(record.id)">删除</a-button>
         </template>
       </template>
     </a-table>
@@ -84,14 +83,14 @@ const columns = [
   },
 ]
 
-// 数据
+// 展示的数据
 const data = ref<API.UserVO[]>([])
 const total = ref(0)
 
 // 搜索条件
 const searchParams = reactive<API.UserQueryRequest>({
   pageNum: 1,
-  pageSize: 2,
+  pageSize: 10,
 })
 
 // 获取数据
@@ -118,14 +117,16 @@ const pagination = computed(() => {
   }
 })
 
-// 表格变化处理
-const doTableChange = (page: any) => {
+// 表格分页变化时的操作
+const doTableChange = (page: { current: number; pageSize: number }) => {
   searchParams.pageNum = page.current
   searchParams.pageSize = page.pageSize
   fetchData()
 }
 
+// 搜索数据
 const doSearch = () => {
+  // 重置页码
   searchParams.pageNum = 1
   fetchData()
 }
@@ -145,15 +146,16 @@ const doDelete = async (id: string) => {
   }
 }
 
-
 // 页面加载时请求一次
 onMounted(() => {
   fetchData()
 })
 </script>
 
-<style>
+<style scoped>
 #userManagePage {
-  width: 80vw;
+  padding: 24px;
+  background: white;
+  margin-top: 16px;
 }
 </style>

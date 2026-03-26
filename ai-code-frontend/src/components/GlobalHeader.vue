@@ -6,7 +6,7 @@
         <RouterLink to="/">
           <div class="header-left">
             <img class="logo" src="@/assets/logo.png" alt="Logo" />
-            <h1 class="site-title">智能代码生成</h1>
+            <h1 class="site-title">代码智能生成</h1>
           </div>
         </RouterLink>
       </a-col>
@@ -30,7 +30,7 @@
               </a-space>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item @click="doLogOut">
+                  <a-menu-item @click="doLogout">
                     <LogoutOutlined />
                     退出登录
                   </a-menu-item>
@@ -52,11 +52,10 @@ import { computed, h, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { type MenuProps, message } from 'ant-design-vue'
 import { useLoginUserStore } from '@/stores/loginUser.ts'
-import { HomeOutlined, LogoutOutlined } from '@ant-design/icons-vue'
 import { userLogout } from '@/api/userController.ts'
+import { LogoutOutlined, HomeOutlined } from '@ant-design/icons-vue'
 
 const loginUserStore = useLoginUserStore()
-
 const router = useRouter()
 // 当前选中菜单
 const selectedKeys = ref<string[]>(['/'])
@@ -70,13 +69,18 @@ const originItems = [
   {
     key: '/',
     icon: () => h(HomeOutlined),
-    label: '首页',
-    title: '首页',
+    label: '主页',
+    title: '主页',
   },
   {
     key: '/admin/userManage',
     label: '用户管理',
     title: '用户管理',
+  },
+  {
+    key: '/admin/appManage',
+    label: '应用管理',
+    title: '应用管理',
   },
   {
     key: 'others',
@@ -112,7 +116,8 @@ const handleMenuClick: MenuProps['onClick'] = (e) => {
   }
 }
 
-const doLogOut = async () => {
+// 退出登录
+const doLogout = async () => {
   const res = await userLogout()
   if (res.data.code === 0) {
     loginUserStore.setLoginUser({
@@ -121,7 +126,7 @@ const doLogOut = async () => {
     message.success('退出登录成功')
     await router.push('/user/login')
   } else {
-    message.error('退出登录失败----' + res.data.message)
+    message.error('退出登录失败，' + res.data.message)
   }
 }
 </script>
