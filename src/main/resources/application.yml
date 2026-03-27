@@ -53,16 +53,15 @@ langchain4j:
     dashscope:
       streaming-chat-model:
         api-key: ${DASHSCOPE_API_KEY}
-        model-name: MiniMax-M2.1
+        model-name: glm-5
         max-tokens: 8192
         parameters:
           enable-thinking: true
       chat-model:
         api-key: ${DASHSCOPE_API_KEY}
-        model-name: MiniMax-M2.1
+        model-name: glm-5
         max-tokens: 8192
         parameters:
-          strict-json-schema: true
           response-format: json
           enable-thinking: true
 

@@ -113,8 +113,8 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
-        <!-- Spring Session + Redis -->
         <dependency>
+            <!-- Spring Session + Redis -->
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>

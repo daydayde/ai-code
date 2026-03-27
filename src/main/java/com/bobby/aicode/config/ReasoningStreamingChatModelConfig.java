@@ -1,6 +1,7 @@
 package com.bobby.aicode.config;
 
 import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
+import dev.langchain4j.community.model.dashscope.QwenChatRequestParameters;
 import dev.langchain4j.model.chat.StreamingChatModel;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -32,6 +33,9 @@ public class ReasoningStreamingChatModelConfig {
                 .baseUrl(baseUrl)
                 .modelName(modelName)
                 .maxTokens(maxTokens)
+                .defaultRequestParameters(QwenChatRequestParameters.builder()
+                        .enableThinking(true)
+                        .build())
                 .build();
     }
 }
