@@ -6,10 +6,25 @@ spring:
     url: jdbc:mysql://localhost:3306/db04
     username: root
     password: 1234
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      ttl: 3600
+      database: 0
+  session:
+    store-type: redis
+    timeout: 259200
+
+
 server:
   port: 8080 # 端口号
   servlet:
     context-path: /api # 后端访问的前缀
+    session:
+      cookie:
+        max-age: 259200
 
 # springdoc-openai后端调试工具(knife4j)
 springdoc:
@@ -38,15 +53,18 @@ langchain4j:
     dashscope:
       streaming-chat-model:
         api-key: ${DASHSCOPE_API_KEY}
-        model-name: glm-4.7
+        model-name: MiniMax-M2.1
         max-tokens: 8192
+        parameters:
+          enable-thinking: true
       chat-model:
         api-key: ${DASHSCOPE_API_KEY}
-        model-name: glm-4.7
+        model-name: MiniMax-M2.1
         max-tokens: 8192
         parameters:
           strict-json-schema: true
           response-format: json
+          enable-thinking: true
 
 
 #// 在代码中构建模型时启用请求和响应日志
