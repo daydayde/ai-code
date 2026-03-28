@@ -171,7 +171,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         }
         // 5.获取代码生成类型，获取原始代码生成路径
         String codeGenType = app.getCodeGenType();
-        String sourceDirName = codeGenType + "_project_" + appId;
+        String sourceDirName = codeGenType + "_" + appId;
         String sourceDirpath = AppConstant.CODE_OUTPUT_ROOT_DIR + File.separator + sourceDirName;
         // 6.检查路径是否存在
         File sourceDir = new File(sourceDirpath);
