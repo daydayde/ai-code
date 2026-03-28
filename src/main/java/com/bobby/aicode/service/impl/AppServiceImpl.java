@@ -22,6 +22,7 @@ import com.bobby.aicode.model.vo.AppVO;
 import com.bobby.aicode.model.vo.UserVO;
 import com.bobby.aicode.service.AppService;
 import com.bobby.aicode.service.ChatHistoryService;
+import com.bobby.aicode.service.ScreenshotService;
 import com.bobby.aicode.service.UserService;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
@@ -57,6 +58,8 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     private StreamHandlerExecutor streamHandlerExecutor;
     @Resource
     private VueProjectBuilder vueProjectBuilder;
+    @Resource
+    private ScreenshotService screenshotService;
 
     @Override
     public AppVO getAppVO(App app) {
@@ -199,7 +202,23 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         boolean updateResult = this.updateById(updateApp);
         ThrowUtils.throwIf(!updateResult, ErrorCode.OPERATION_ERROR, "更新应用部署失败");
         // 9.返回可访问的URL地址
-        return String.format("%s/%s", AppConstant.CODE_DEPLOY_HOST, deployKey);
+        String deployUrl = String.format("%s/%s", AppConstant.CODE_DEPLOY_HOST, deployKey);
+        // 10.异步截图并且生成封面
+        generateAppScreenshotAsync(appId, deployUrl);
+        return deployUrl;
+    }
+
+    @Override
+    public void generateAppScreenshotAsync(Long appId, String appDeployUrl) {
+        Thread.startVirtualThread(() -> {
+            // 调用截图服务并上传
+            String screenshorUrl = screenshotService.generateAndUploadScreenshot(appDeployUrl);
+            App app = new App();
+            app.setId(appId);
+            app.setCover(screenshorUrl);
+            boolean updateResult = this.updateById(app);
+            ThrowUtils.throwIf(!updateResult, ErrorCode.OPERATION_ERROR, "更新应用封面字段失败");
+        });
     }
 
     /**

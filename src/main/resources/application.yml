@@ -53,23 +53,14 @@ langchain4j:
     dashscope:
       streaming-chat-model:
         api-key: ${DASHSCOPE_API_KEY}
-        model-name: glm-5
+        model-name: MiniMax-M2.1
         max-tokens: 8192
         parameters:
           enable-thinking: true
       chat-model:
         api-key: ${DASHSCOPE_API_KEY}
-        model-name: glm-5
+        model-name: MiniMax-M2.1
         max-tokens: 8192
         parameters:
           response-format: json
           enable-thinking: true
-
-
-#// 在代码中构建模型时启用请求和响应日志
-#ChatModel chatModel = QwenChatModel.builder()
-#    .apiKey("${DASHSCOPE_API_KEY}")
-#    .modelName("glm-4.7")
-#    .logRequests(true)    // 启用请求日志记录
-#    .logResponses(true)   // 启用响应日志记录
-#    .build();

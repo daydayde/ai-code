@@ -84,7 +84,6 @@ public class AiCodeGeneratorFacade {
             }
             case VUE_PROJECT -> {
                 TokenStream tokenStream = aiCodeGeneratorService.generateVueProjectCodeStream(appId, userMessage);
-                aiCodeGeneratorService.generateVueProjectCodeStream(appId, userMessage);
                 yield processTokenStream(tokenStream);
             }
             default -> {
