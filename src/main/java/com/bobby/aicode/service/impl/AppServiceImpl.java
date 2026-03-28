@@ -7,6 +7,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.bobby.aicode.constant.AppConstant;
 import com.bobby.aicode.core.AiCodeGeneratorFacade;
+import com.bobby.aicode.core.builder.VueProjectBuilder;
 import com.bobby.aicode.core.handler.StreamHandlerExecutor;
 import com.bobby.aicode.exception.BusinessException;
 import com.bobby.aicode.exception.ErrorCode;
@@ -54,6 +55,8 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     private ChatHistoryService chatHistoryService;
     @Resource
     private StreamHandlerExecutor streamHandlerExecutor;
+    @Resource
+    private VueProjectBuilder vueProjectBuilder;
 
     @Override
     public AppVO getAppVO(App app) {
@@ -165,12 +168,21 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         }
         // 5.获取代码生成类型，获取原始代码生成路径
         String codeGenType = app.getCodeGenType();
-        String sourceDirName = codeGenType + "_" + appId;
+        String sourceDirName = codeGenType + "_project_" + appId;
         String sourceDirpath = AppConstant.CODE_OUTPUT_ROOT_DIR + File.separator + sourceDirName;
         // 6.检查路径是否存在
         File sourceDir = new File(sourceDirpath);
         if (!sourceDir.exists() || !sourceDir.isDirectory()) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "应用代码路径不存在，请先生成应用");
+        }
+        // vue项目特殊处理
+        CodeGenTypeEnum codeGenTypeEnum = CodeGenTypeEnum.getEnumByValue(codeGenType);
+        if (codeGenTypeEnum == CodeGenTypeEnum.VUE_PROJECT) {
+            boolean buildProject = vueProjectBuilder.buildProject(sourceDirpath);
+            ThrowUtils.throwIf(!buildProject, ErrorCode.SYSTEM_ERROR, "Vue项目构建失败，请重试");
+            File distDir = new File(sourceDirpath, "dist");
+            ThrowUtils.throwIf(!distDir.exists(), ErrorCode.SYSTEM_ERROR, "Vue项目构建完成但未生成dist目录");
+            sourceDir = distDir;
         }
         // 7.复制文件到部署目录
         String deployDirPath = AppConstant.CODE_DEPLOY_ROOT_DIR + File.separator + deployKey;
