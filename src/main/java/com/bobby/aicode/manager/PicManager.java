@@ -68,4 +68,8 @@ public class PicManager {
             //throw new BusinessException(ErrorCode.OPERATION_ERROR, "上传文件失败: " + e.getMessage());
         }
     }
+
+    public String uploadFile(String filePath) {
+        return uploadFile(filePath, "img.scdn.io");
+    }
 }
