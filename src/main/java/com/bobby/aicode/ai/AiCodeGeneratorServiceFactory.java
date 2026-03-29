@@ -1,6 +1,6 @@
 package com.bobby.aicode.ai;
 
-import com.bobby.aicode.ai.tools.FileWriteTool;
+import com.bobby.aicode.ai.tools.*;
 import com.bobby.aicode.exception.BusinessException;
 import com.bobby.aicode.exception.ErrorCode;
 import com.bobby.aicode.model.enums.CodeGenTypeEnum;
@@ -35,6 +35,8 @@ public class AiCodeGeneratorServiceFactory {
     private ChatHistoryService chatHistoryService;
     @Resource
     private QwenStreamingChatModel reasoningStreamingChatModel;
+    @Resource
+    private ToolManager toolManager;
 
     /**
      * AI 服务实例缓存
@@ -82,7 +84,7 @@ public class AiCodeGeneratorServiceFactory {
                     .chatModel(qwenChatModel)
                     .streamingChatModel(reasoningStreamingChatModel)
                     .chatMemoryProvider(MemoryId -> chatMemory)
-                    .tools(new FileWriteTool())
+                    .tools(toolManager.getAllTools())
                     .hallucinatedToolNameStrategy(toolExecutionRequest ->
                             ToolExecutionResultMessage.from(toolExecutionRequest,
                                     "执行错误，这里没有叫做 " + toolExecutionRequest.name() + " 的工具"))
