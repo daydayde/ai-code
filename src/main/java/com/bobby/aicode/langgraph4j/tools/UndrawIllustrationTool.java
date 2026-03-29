@@ -20,7 +20,7 @@ import java.util.List;
 @Component
 public class UndrawIllustrationTool {
 
-    private static final String UNDRAW_API_URL = "https://undraw.co/_next/data/mMWmJSt23qpgo8cLTD_pB/search/%s.json?term=%s";
+    private static final String UNDRAW_API_URL = "https://undraw.co/_next/data/rxbI0cNBbVhP70ybALHAo/search/%s.json?term=%s";
 
     @Tool("搜索插画图片，用于网站美化和装饰")
     public List<ImageResource> searchIllustrations(@P("搜索关键词") String query) {
