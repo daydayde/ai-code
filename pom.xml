@@ -146,12 +146,12 @@
             <artifactId>webdrivermanager</artifactId>
             <version>6.1.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            &lt;!&ndash;调用阿里大模型，此项目使用此依赖调用文生图模型&ndash;&gt;-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>dashscope-sdk-java</artifactId>-->
-<!--            <version>2.22.13</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <!--调用阿里大模型，此项目使用此依赖调用文生图模型-->
+            <groupId>com.alibaba</groupId>
+            <artifactId>dashscope-sdk-java</artifactId>
+            <version>2.22.13</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
