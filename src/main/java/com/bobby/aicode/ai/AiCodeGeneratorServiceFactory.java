@@ -1,5 +1,6 @@
 package com.bobby.aicode.ai;
 
+import com.bobby.aicode.ai.guardrail.PromptSafetyInputGuardrail;
 import com.bobby.aicode.ai.tools.ToolManager;
 import com.bobby.aicode.exception.BusinessException;
 import com.bobby.aicode.exception.ErrorCode;
@@ -86,6 +87,9 @@ public class AiCodeGeneratorServiceFactory {
                         .streamingChatModel(reasoningStreamingChatModel)
                         .chatMemoryProvider(MemoryId -> chatMemory)
                         .tools(toolManager.getAllTools())
+                        .inputGuardrails(new PromptSafetyInputGuardrail()) // 输入护轨
+                        // 输出护轨 使用输出护轨将不能使用流式输出
+                        // .outputGuardrails(new RetryOutputGuardrail())
                         .hallucinatedToolNameStrategy(toolExecutionRequest ->
                                 ToolExecutionResultMessage.from(toolExecutionRequest,
                                         "执行错误，这里没有叫做 " + toolExecutionRequest.name() + " 的工具"))
@@ -97,6 +101,8 @@ public class AiCodeGeneratorServiceFactory {
                         .chatModel(qwenChatModel)
                         .streamingChatModel(qwenStreamingChatModel)
                         .chatMemory(chatMemory)
+                        .inputGuardrails(new PromptSafetyInputGuardrail())
+                        // .outputGuardrails(new RetryOutputGuardrail())
                         .build();
             }
             default ->
