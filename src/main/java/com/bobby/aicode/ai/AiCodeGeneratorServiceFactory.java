@@ -1,17 +1,18 @@
 package com.bobby.aicode.ai;
 
-import com.bobby.aicode.ai.tools.*;
+import com.bobby.aicode.ai.tools.ToolManager;
 import com.bobby.aicode.exception.BusinessException;
 import com.bobby.aicode.exception.ErrorCode;
 import com.bobby.aicode.model.enums.CodeGenTypeEnum;
 import com.bobby.aicode.service.ChatHistoryService;
+import com.bobby.aicode.utils.SpringContextUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import dev.langchain4j.community.model.dashscope.QwenChatModel;
-import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
 import dev.langchain4j.community.store.memory.chat.redis.RedisChatMemoryStore;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.service.AiServices;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +28,12 @@ import static com.bobby.aicode.model.enums.CodeGenTypeEnum.HTML;
 public class AiCodeGeneratorServiceFactory {
     @Resource
     private QwenChatModel qwenChatModel;
-    @Resource
-    private QwenStreamingChatModel qwenStreamingChatModel;
+
     @Resource
     private RedisChatMemoryStore redisChatMemoryStore;
     @Resource
     private ChatHistoryService chatHistoryService;
-    @Resource
-    private QwenStreamingChatModel reasoningStreamingChatModel;
+
     @Resource
     private ToolManager toolManager;
 
@@ -80,20 +79,26 @@ public class AiCodeGeneratorServiceFactory {
                 .build();
         chatHistoryService.loadChatHistoryToMemory(appId, chatMemory, 20);
         return switch (codeGenType) {
-            case VUE_PROJECT -> AiServices.builder(AiCodeGeneratorService.class)
-                    .chatModel(qwenChatModel)
-                    .streamingChatModel(reasoningStreamingChatModel)
-                    .chatMemoryProvider(MemoryId -> chatMemory)
-                    .tools(toolManager.getAllTools())
-                    .hallucinatedToolNameStrategy(toolExecutionRequest ->
-                            ToolExecutionResultMessage.from(toolExecutionRequest,
-                                    "执行错误，这里没有叫做 " + toolExecutionRequest.name() + " 的工具"))
-                    .build();
-            case HTML, MULTI_FILE -> AiServices.builder(AiCodeGeneratorService.class)
-                    .chatModel(qwenChatModel)
-                    .streamingChatModel(qwenStreamingChatModel)
-                    .chatMemory(chatMemory)
-                    .build();
+            case VUE_PROJECT -> {
+                StreamingChatModel reasoningStreamingChatModel = SpringContextUtil.getBean("reasoningStreamingChatModelPrototype", StreamingChatModel.class);
+                yield AiServices.builder(AiCodeGeneratorService.class)
+                        .chatModel(qwenChatModel)
+                        .streamingChatModel(reasoningStreamingChatModel)
+                        .chatMemoryProvider(MemoryId -> chatMemory)
+                        .tools(toolManager.getAllTools())
+                        .hallucinatedToolNameStrategy(toolExecutionRequest ->
+                                ToolExecutionResultMessage.from(toolExecutionRequest,
+                                        "执行错误，这里没有叫做 " + toolExecutionRequest.name() + " 的工具"))
+                        .build();
+            }
+            case HTML, MULTI_FILE -> {
+                StreamingChatModel qwenStreamingChatModel = SpringContextUtil.getBean("streamingChatModelPrototype", StreamingChatModel.class);
+                yield AiServices.builder(AiCodeGeneratorService.class)
+                        .chatModel(qwenChatModel)
+                        .streamingChatModel(qwenStreamingChatModel)
+                        .chatMemory(chatMemory)
+                        .build();
+            }
             default ->
                     throw new BusinessException(ErrorCode.SYSTEM_ERROR, "不支持的代码生成类型：" + codeGenType.getValue());
         };

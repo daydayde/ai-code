@@ -1,43 +1,44 @@
 package com.bobby.aicode.config;
 
-import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
+import dev.langchain4j.community.model.dashscope.QwenChatModel;
 import dev.langchain4j.community.model.dashscope.QwenChatRequestParameters;
-import dev.langchain4j.model.chat.StreamingChatModel;
+import dev.langchain4j.model.chat.ChatModel;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+/**
+ * 智能路由模型配置
+ */
 @Configuration
-@ConfigurationProperties(prefix = "reasoning-streaming-chat-model")
+@ConfigurationProperties(prefix = "routing-chat-model")
 @Data
-public class ReasoningStreamingChatModelConfig {
+public class RoutingAiModelConfig {
 
     private String baseUrl;
 
     private String apiKey;
 
+    private String modelName;
+
     private float temperature;
 
+    private Boolean logRequests = false;
+
+    private Boolean logResponses = false;
+
     /**
-     * 推理流式模型（用于 Vue 项目生成，带工具调用）
+     * 创建用于路由判断的ChatModel
      */
     @Bean
     @Scope("prototype")
-    public StreamingChatModel reasoningStreamingChatModelPrototype() {
-        // 为了测试方便临时修改
-        final String modelName = "MiniMax-M2.1";
-        final int maxTokens = 32768;
-        // 生产环境使用：
-        // final String modelName = "deepseek-reasoner";
-        // final int maxTokens = 32768;
-        return QwenStreamingChatModel.builder()
+    public ChatModel routingChatModelPrototype() {
+        return QwenChatModel.builder()
                 .apiKey(apiKey)
-                .baseUrl(baseUrl)
                 .modelName(modelName)
                 .temperature(temperature)
-                .maxTokens(maxTokens)
                 .defaultRequestParameters(QwenChatRequestParameters.builder()
                         .enableThinking(true)
                         .build())

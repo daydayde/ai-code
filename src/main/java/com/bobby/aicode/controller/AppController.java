@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.bobby.aicode.ai.AiCodeGenTypeRoutingService;
+import com.bobby.aicode.ai.AiCodeGenTypeRoutingServiceFactory;
 import com.bobby.aicode.annotation.AuthCheck;
 import com.bobby.aicode.common.BaseResponse;
 import com.bobby.aicode.common.DeleteRequest;
@@ -54,8 +55,7 @@ public class AppController {
     @Resource
     private ProjectDownloadService projectDownloadService;
     @Resource
-    private AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService;
-    ;
+    private AiCodeGenTypeRoutingServiceFactory aiCodeGenTypeRoutingServiceFactory;
 
     /**
      * 下载应用代码
@@ -157,6 +157,7 @@ public class AppController {
         // 应用名称暂时为 initPrompt 前 12 位
         app.setAppName(initPrompt.substring(0, Math.min(initPrompt.length(), 12)));
         // 路由智能选择文件生成类型
+        AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService = aiCodeGenTypeRoutingServiceFactory.creatAiCodeGenTypeRoutingService();
         CodeGenTypeEnum codeGenTypeEnum = aiCodeGenTypeRoutingService.routeCodeGenType(initPrompt);
         // 暂时设置为多文件生成
         app.setCodeGenType(codeGenTypeEnum.getValue());

@@ -55,16 +55,32 @@ langchain4j:
       streaming-chat-model:
         api-key: ${DASHSCOPE_API_KEY}
         model-name: MiniMax-M2.1
-        max-tokens: 8192
+        temperature: 0.1
         parameters:
           enable-thinking: true
       chat-model:
         api-key: ${DASHSCOPE_API_KEY}
         model-name: MiniMax-M2.1
-        max-tokens: 8192
         parameters:
           response-format: json
           enable-thinking: true
+
+# AI 模型配置
+# 推理 AI 模型配置（用于复杂的推理任务）
+reasoning-streaming-chat-model:
+  api-key: ${DASHSCOPE_API_KEY}
+  model-name: MiniMax-M2.1
+  max-tokens: 32768
+  temperature: 0.1
+  log-requests: true
+  log-responses: true
+# 智能路由 AI 模型配置（用于简单的分类任务）
+routing-chat-model:
+  api-key: ${DASHSCOPE_API_KEY}
+  model-name: MiniMax-M2.1
+  log-requests: true
+  log-responses: true
+
 
 dashscope:
   api-key: ${DASHSCOPE_API_KEY}
