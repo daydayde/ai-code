@@ -20,6 +20,8 @@ import com.bobby.aicode.model.enums.ChatHistoryMessageTypeEnum;
 import com.bobby.aicode.model.enums.CodeGenTypeEnum;
 import com.bobby.aicode.model.vo.AppVO;
 import com.bobby.aicode.model.vo.UserVO;
+import com.bobby.aicode.monitor.MonitorContext;
+import com.bobby.aicode.monitor.MonitorContextHolder;
 import com.bobby.aicode.service.AppService;
 import com.bobby.aicode.service.ChatHistoryService;
 import com.bobby.aicode.service.ScreenshotService;
@@ -144,11 +146,17 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         }
         // 5. 保存用户消息到数据库中
         chatHistoryService.addChatMessage(appId, prompt, ChatHistoryMessageTypeEnum.USER.getValue(), loginUser.getId());
-
+        // 6.设置监控上下文（用户ID和应用ID）
+        MonitorContext monitorContext = MonitorContext.builder()
+                .userId(loginUser.getId().toString())
+                .appId(appId.toString())
+                .build();
+        MonitorContextHolder.setContext(monitorContext);
         // 6.调用AI生成代码
         Flux<String> contentFlux = aiCodeGeneratorFacade.generateAndSaveCodeStream(prompt, codeGenTypeEnum, appId);
         // 7. 保存AI响应的内容到数据库中
-        return streamHandlerExecutor.doExecute(contentFlux, chatHistoryService, appId, loginUser, codeGenTypeEnum);
+        return streamHandlerExecutor.doExecute(contentFlux, chatHistoryService, appId, loginUser, codeGenTypeEnum)
+                .doFinally(signalType -> MonitorContextHolder.clearContext());
     }
 
     @Override

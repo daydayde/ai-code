@@ -3,11 +3,15 @@ package com.bobby.aicode.config;
 import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
 import dev.langchain4j.community.model.dashscope.QwenChatRequestParameters;
 import dev.langchain4j.model.chat.StreamingChatModel;
+import dev.langchain4j.model.chat.listener.ChatModelListener;
+import jakarta.annotation.Resource;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
+import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "reasoning-streaming-chat-model")
@@ -19,6 +23,10 @@ public class ReasoningStreamingChatModelConfig {
     private String apiKey;
 
     private float temperature;
+
+    @Resource
+    private ChatModelListener modelListener;
+
 
     /**
      * 推理流式模型（用于 Vue 项目生成，带工具调用）
@@ -41,6 +49,7 @@ public class ReasoningStreamingChatModelConfig {
                 .defaultRequestParameters(QwenChatRequestParameters.builder()
                         .enableThinking(true)
                         .build())
+                .listeners(List.of(modelListener))
                 .build();
     }
 }

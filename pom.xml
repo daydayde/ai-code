@@ -136,6 +136,17 @@
             <version>1.1.0-beta7</version>
         </dependency>
         <dependency>
+            <!--暴露管理和监控端点-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <!--收集暴露的指标数据，并转换为prometheus格式-->
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <dependency>
             <!-- LangGraph4j -->
             <groupId>org.bsc.langgraph4j</groupId>
             <artifactId>langgraph4j-core</artifactId>
